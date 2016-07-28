@@ -13,7 +13,7 @@
 |1|192.168.111.11|hadoop-master|
 |2|192.168.111.12|hadoop-slave|    
 
-### ssh 免密登录，也可以自己登录自己
+### ssh 免密登录，也可以自己登录自己(略)
 
 ### 添加用用户
 
@@ -151,6 +151,7 @@
 ```
 
 > hadoop-master
+
 > hadoop-slave
 
 ### 将master上面的hadoop配置同步到slave上面 (注意用户为hadoop)
