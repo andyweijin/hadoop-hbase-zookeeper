@@ -148,11 +148,55 @@
 
 > hadoop-slave
 
+
+### zookeeper 搭建(注意 dataDir 的容量)
+
+```shell
+# cd /opt/zookeeper-3.4.6/conf
+# vim zoo.cfg
+```
+
+
+```
+# The number of milliseconds of each tick
+tickTime=2000
+# The number of ticks that the initial 
+# synchronization phase can take
+initLimit=10
+# The number of ticks that can pass between 
+# sending a request and getting an acknowledgement
+syncLimit=5
+# the directory where the snapshot is stored.
+# do not use /tmp for storage, /tmp here is just 
+# example sakes.
+# dataDir=/tmp/zookeeper
+# the port at which the clients will connect
+clientPort=2181
+# the maximum number of client connections.
+# increase this if you need to handle more clients
+#maxClientCnxns=60
+#
+# Be sure to read the maintenance section of the 
+# administrator guide before turning on autopurge.
+#
+# http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance
+#
+# The number of snapshots to retain in dataDir
+#autopurge.snapRetainCount=3
+# Purge task interval in hours
+# Set to "0" to disable auto purge feature
+#autopurge.purgeInterval=1
+
+dataDir=/home/hadoop/tmp/zookeeper/data
+server.1=hadoop-master:7000:7001
+server.2=hadoop-slave:7000:7001
+```
+
+
 ### 将master上面的hadoop配置同步到slave上面 (注意用户为hadoop)
 
 ```shell
 scp -r /opt/hadoop-1.2.1 hadoop-slave:/opt/
-scp -r /opt/hbase-0.94.27 hadoop-slave:/opt/
 scp -r /opt/zookeeper-3.4.6 hadoop-slave:/opt/
 ```
 
@@ -164,9 +208,9 @@ scp -r /opt/zookeeper-3.4.6 hadoop-slave:/opt/
 # ./start-all.sh
 ```
 
-## 测试
+### 测试
 
-### master上面执行：jps
+- master上面执行：jps
 
 ```
 SecondaryNameNode
@@ -177,7 +221,7 @@ DataNode
 Jps
 ```
 
-### slave 上面执行：jps
+- slave 上面执行：jps
 
 ```
 TaskTracker
@@ -186,4 +230,90 @@ Jps
 ```
 
 
-            
+*** 
+
+# 基于 hadoop 搭建 hbase 
+
+
+```shell
+# cd /opt/hbase-0.94.27/conf
+# vim hbase-env.sh
+```
+
+> export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk.x86_64
+
+
+```shell
+# vim hbase-site.xml
+```
+
+```xml
+<configuration>
+    <property>
+        <name>hbase.rootdir</name>
+        <value>hdfs://hadoop-master:9000/hbase</value>
+    </property>
+    <property>
+        <name>hbase.cluster.distributed</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hbase.master</name>
+        <value>hadoop-master</value>
+    </property>
+    <property>
+        <name>hbase.zookeeper.quorum</name>
+        <value>hadoop-master,hadoop-slave</value>
+    </property>
+    <property>
+        <name>hbase.zookeeper.property.dataDir</name>
+        <value>/home/hadoop/tmp/zookeeper/data</value>
+    </property>
+</configuration>
+```
+
+
+
+
+```shell
+scp -r /opt/hbase-0.94.27 hadoop-slave:/opt/
+```  
+
+ - 重新格式化文件系统 (可以看到一个hbase的文件目录)
+
+```shell
+# hadoop namenode -format
+```
+
+ - 重启 hadoop 集群
+
+```shell
+# cd /opt/hadoop-1.2.1
+# bin/stop-all.sh
+# bin/start-all.sh
+```
+
+### 测试
+
+- master上面执行：jps
+
+```
+DataNode
+HRegionServer
+HMaster
+TaskTracker
+NameNode
+Jps
+JobTracker
+SecondaryNameNode
+QuorumPeerMain
+```
+
+- slave 上面执行：jps
+
+```
+QuorumPeerMain
+TaskTracker
+DataNode
+Jps
+```
