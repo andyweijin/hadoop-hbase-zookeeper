@@ -1,17 +1,11 @@
 # hadoop-hbase-zookeeper  环境搭建
 
-## 运行环境
-
- - centos6.6-86_64 x 2
-
-## 安装步骤
-
 ### 运行环境
 
-|num | ip | hostname |
-|---|:---:|:---:|
-|1|192.168.111.11|hadoop-master|
-|2|192.168.111.12|hadoop-slave|    
+|num |system| ip | hostname |
+|---|:---:|:---:|:---:|
+|1|centos6.6-86_64 |192.168.111.11|hadoop-master|
+|2|centos6.6-86_64 |192.168.111.12|hadoop-slave|    
 
 ### ssh 免密登录，也可以自己登录自己(略)
 
