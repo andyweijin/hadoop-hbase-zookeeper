@@ -6,23 +6,23 @@
 
 ## 安装步骤
 
- - 运行环境
+### 运行环境
 
 |num | ip | hostname |
 |---|:---:|:---:|
 |1|192.168.111.11|hadoop-master|
 |2|192.168.111.12|hadoop-slave|    
 
-- ssh 免密登录，也可以自己登录自己
+### ssh 免密登录，也可以自己登录自己
 
-- 添加用用户
+### 添加用用户
 
 ```shell
 # groupadd hadoop
 # useradd -g hadoop hadoop
 ```
 
-- 修改hosts
+### 修改hosts
 
 ```shell
 # vim /etc/hosts
@@ -37,17 +37,17 @@
 >  注释掉 ::1 hadoop-master 或 hadoop-slave
 
 
- - install openjdk （devel 版本带jps命令，两台机器都需要执行）
+### install openjdk （devel 版本带jps命令，两台机器都需要执行）
 
 
-```
+```shell
 # yum install java-1.7.0-openjdk-devel.x86_64
 ```
 
 
- - java 环境变量
+### java 环境变量
 
-```
+```shell
 # vim /etc/profile
 ```
 
@@ -64,9 +64,9 @@
 > export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$HADOOP_HOME/bin:$PATH
 
  
- - hadoop 安装
+### hadoop 安装
 
-```
+```shell
 # mv hadoop-1.2.1 /opt/
 # mv hbase-0.94.27 /opt/
 # mv zookeeper-3.4.6 /opt/ 
@@ -74,7 +74,7 @@
 # cd /opt/hadoop-1.2.1/conf
 ```
 
-```
+```shell
 # vim hadoop-env.sh
 ```
 
@@ -153,7 +153,7 @@
 > hadoop-master
 > hadoop-slave
 
-- 将master上面的hadoop配置同步到slave上面 (注意用户为hadoop)
+### 将master上面的hadoop配置同步到slave上面 (注意用户为hadoop)
 
 ```shell
 scp -r /opt/hadoop-1.2.1 hadoop-slave:/opt/
@@ -161,17 +161,17 @@ scp -r /opt/hbase-0.94.27 hadoop-slave:/opt/
 scp -r /opt/zookeeper-3.4.6 hadoop-slave:/opt/
 ```
 
- - 启动测试 （启动和停止的操作只能在master上面执行）
+### 启动 （启动和停止的操作只能在master上面执行）
 
 ```shell
 # hadoop namenode -format
 # cd /opt/hadoop-1.2.1/bin
-#./start-all.sh
+# ./start-all.sh
 ```
 
 ## 测试
 
- - master上面执行：jps
+### master上面执行：jps
 
 ```
 SecondaryNameNode
@@ -182,7 +182,7 @@ DataNode
 Jps
 ```
 
- - slave 上面执行：jps
+### slave 上面执行：jps
 
 ```
 TaskTracker
