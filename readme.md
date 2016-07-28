@@ -229,10 +229,6 @@ DataNode
 Jps
 ```
 
-
----
----
-
 # 基于 hadoop 搭建 hbase 
 
 
